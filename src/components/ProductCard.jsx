@@ -1,102 +1,77 @@
+// src/components/ProductCard.jsx
 import React from 'react';
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-} from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { useCart } from '../context/CartContext';
 import { colors } from '../styles/colors';
 
-export default function ProductCard({ product }) {
+const ProductCard = ({ product }) => {
   const router = useRouter();
-  const { addToCart } = useCart();
 
   return (
-    <TouchableOpacity
-      style={styles.container}
-      onPress={() => router.push(`/product-details/${product.id}`)}
-      activeOpacity={0.8}
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: colors.white,
+        borderRadius: 12,
+        padding: 12,
+        margin: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+      }}
     >
-      <Image
-        source={{ uri: product.image }}
-        style={styles.image}
-        resizeMode="contain"
-      />
-      <Text style={styles.name} numberOfLines={2}>
-        {product.name}
-      </Text>
-      <View style={styles.footer}>
-        <Text style={styles.price}>${product.price}</Text>
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => addToCart(product)}
-          activeOpacity={0.7}
+      <TouchableOpacity
+        onPress={() => router.push(`/product/${product.id}`)} // For browsing/details
+      >
+        <Image
+          source={{ uri: product.image }}
+          style={{
+            width: '100%',
+            height: 128,
+            borderRadius: 8,
+          }}
+          resizeMode="contain"
+        />
+        <Text
+          style={{
+            fontSize: 16,
+            fontWeight: '600',
+            color: colors.secondary.DEFAULT,
+            marginTop: 8,
+          }}
+          numberOfLines={2}
         >
-          <Text style={styles.addButtonText}>+</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
+          {product.name}
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: '500',
+            color: colors.primary,
+            marginTop: 4,
+          }}
+        >
+          ${product.price.toFixed(2)}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={{
+          backgroundColor: colors.primary,
+          paddingVertical: 8,
+          borderRadius: 8,
+          alignItems: 'center',
+          marginTop: 8,
+        }}
+        onPress={() => router.push(`/order/${product.id}`)} // For ordering
+      >
+        <Text style={{ fontSize: 14, fontWeight: '600', color: colors.white }}>
+          Buy Now
+        </Text>
+      </TouchableOpacity>
+    </View>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    margin: 8,
-    backgroundColor: colors.white,
-    borderRadius: 16,
-    padding: 12,
-    shadowColor: colors.secondary,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    ...Platform.select({
-      ios: {
-        shadowOpacity: 0.15,
-      },
-      android: {
-        elevation: 4,
-      },
-    }),
-  },
-  image: {
-    width: '100%',
-    height: 120,
-    borderRadius: 12,
-    marginBottom: 8,
-  },
-  name: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: colors.secondary,
-    marginBottom: 4,
-  },
-  footer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  price: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.primary,
-  },
-  addButton: {
-    backgroundColor: colors.accent,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  addButtonText: {
-    fontSize: 18,
-    color: colors.white,
-    fontWeight: '600',
-  },
-});
+export default ProductCard;

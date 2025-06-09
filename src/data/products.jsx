@@ -5,6 +5,8 @@ export const products = [
     price: 99.99,
     description: 'High-quality wireless headphones with noise cancellation.',
     image: 'https://images.unsplash.com/photo-1580894908361-967195033215?auto=format&fit=crop&w=500&q=80',
+    category: 'Electronics',
+    location: 'Accra',
   },
   {
     id: 2,
@@ -12,6 +14,8 @@ export const products = [
     price: 19.99,
     description: 'Durable and stylish smartphone case.',
     image: 'https://images.unsplash.com/photo-1611078489935-0c90248ec57a?auto=format&fit=crop&w=500&q=80',
+    category: 'Accessories',
+    location: 'Kumasi',
   },
   {
     id: 3,
@@ -19,6 +23,8 @@ export const products = [
     price: 49.99,
     description: 'Portable Bluetooth speaker with excellent sound.',
     image: 'https://images.unsplash.com/photo-1585386959984-a41552262d3b?auto=format&fit=crop&w=500&q=80',
+    category: 'Electronics',
+    location: 'Takoradi',
   },
   {
     id: 4,
@@ -26,6 +32,8 @@ export const products = [
     price: 79.99,
     description: 'Lightweight and comfortable running shoes.',
     image: 'https://images.unsplash.com/photo-1600180758890-6a1d8bafa4d7?auto=format&fit=crop&w=500&q=80',
+    category: 'Footwear',
+    location: 'Tamale',
   },
   {
     id: 5,
@@ -33,6 +41,8 @@ export const products = [
     price: 129.99,
     description: 'Track fitness and stay connected on the go.',
     image: 'https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?auto=format&fit=crop&w=500&q=80',
+    category: 'Wearables',
+    location: 'Accra',
   },
   {
     id: 6,
@@ -40,6 +50,8 @@ export const products = [
     price: 34.99,
     description: 'Elegant and durable leather wallet.',
     image: 'https://images.unsplash.com/photo-1610926115317-67982d2378e7?auto=format&fit=crop&w=500&q=80',
+    category: 'Accessories',
+    location: 'Sunyani',
   },
   {
     id: 7,
@@ -47,6 +59,8 @@ export const products = [
     price: 24.99,
     description: 'Stylish UV-protected sunglasses.',
     image: 'https://images.unsplash.com/photo-1583337130417-3346a1f5b57b?auto=format&fit=crop&w=500&q=80',
+    category: 'Fashion',
+    location: 'Cape Coast',
   },
   {
     id: 8,
@@ -54,6 +68,8 @@ export const products = [
     price: 59.99,
     description: 'Spacious and durable backpack for travel and school.',
     image: 'https://images.unsplash.com/photo-1522199786351-1e1a1a201a2e?auto=format&fit=crop&w=500&q=80',
+    category: 'Bags',
+    location: 'Koforidua',
   },
   {
     id: 9,
@@ -61,6 +77,8 @@ export const products = [
     price: 89.99,
     description: 'RGB backlit mechanical keyboard for gaming and work.',
     image: 'https://images.unsplash.com/photo-1611186871348-b8b84f0445f0?auto=format&fit=crop&w=500&q=80',
+    category: 'Computing',
+    location: 'Accra',
   },
   {
     id: 10,
@@ -68,6 +86,8 @@ export const products = [
     price: 69.99,
     description: 'Brew rich and aromatic coffee at home.',
     image: 'https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=500&q=80',
+    category: 'Kitchen',
+    location: 'Tema',
   },
   {
     id: 11,
@@ -75,6 +95,8 @@ export const products = [
     price: 39.99,
     description: 'Energy-efficient LED lamp with adjustable brightness.',
     image: 'https://images.unsplash.com/photo-1593642634367-d91a135587b5?auto=format&fit=crop&w=500&q=80',
+    category: 'Home Decor',
+    location: 'Bolgatanga',
   },
   {
     id: 12,
@@ -82,6 +104,8 @@ export const products = [
     price: 44.99,
     description: 'Ergonomic mouse with high DPI and RGB lighting.',
     image: 'https://images.unsplash.com/photo-1587202372775-b4a6ddc5d2a0?auto=format&fit=crop&w=500&q=80',
+    category: 'Gaming',
+    location: 'Accra',
   },
   {
     id: 13,
@@ -89,6 +113,8 @@ export const products = [
     price: 29.99,
     description: 'Maintain oral hygiene with smart brushing modes.',
     image: 'https://images.unsplash.com/photo-1588776814546-4c3e02f3fdc7?auto=format&fit=crop&w=500&q=80',
+    category: 'Health',
+    location: 'Wa',
   },
   {
     id: 14,
@@ -96,6 +122,8 @@ export const products = [
     price: 49.99,
     description: 'Monitor steps, sleep, and heart rate daily.',
     image: 'https://images.unsplash.com/photo-1601233744290-0d7055944b6b?auto=format&fit=crop&w=500&q=80',
+    category: 'Fitness',
+    location: 'Ho',
   },
   {
     id: 15,
@@ -103,6 +131,8 @@ export const products = [
     price: 15.99,
     description: 'Stainless steel travel mug for hot and cold drinks.',
     image: 'https://images.unsplash.com/photo-1587740896339-1675ffb90c0f?auto=format&fit=crop&w=500&q=80',
+    category: 'Kitchen',
+    location: 'Tema',
   },
   {
     id: 16,
@@ -110,6 +140,8 @@ export const products = [
     price: 22.99,
     description: 'Adjustable laptop stand for better posture.',
     image: 'https://images.unsplash.com/photo-1611095973518-11c6c787cd7e?auto=format&fit=crop&w=500&q=80',
+    category: 'Computing',
+    location: 'Kumasi',
   },
   {
     id: 17,
@@ -117,6 +149,8 @@ export const products = [
     price: 27.99,
     description: 'Non-slip yoga mat for home workouts.',
     image: 'https://images.unsplash.com/photo-1610622047413-6e6b85e5517f?auto=format&fit=crop&w=500&q=80',
+    category: 'Fitness',
+    location: 'Accra',
   },
   {
     id: 18,
@@ -124,6 +158,8 @@ export const products = [
     price: 34.99,
     description: 'Perfect for content creation and video calls.',
     image: 'https://images.unsplash.com/photo-1587019154628-3307c30e8416?auto=format&fit=crop&w=500&q=80',
+    category: 'Photography',
+    location: 'Takoradi',
   },
   {
     id: 19,
@@ -131,6 +167,8 @@ export const products = [
     price: 18.99,
     description: 'Keep your workspace neat and tidy.',
     image: 'https://images.unsplash.com/photo-1589820296155-74426befe1f4?auto=format&fit=crop&w=500&q=80',
+    category: 'Office Supplies',
+    location: 'Cape Coast',
   },
   {
     id: 20,
@@ -138,8 +176,10 @@ export const products = [
     price: 25.99,
     description: 'Fast wireless charging pad for smartphones.',
     image: 'https://images.unsplash.com/photo-1611605698321-f1d9f37b2d50?auto=format&fit=crop&w=500&q=80',
+    category: 'Electronics',
+    location: 'Sunyani',
   },
-//    {
+  //    {
 //     id: 20,
 //     name: 'Wireless Charger',
 //     price: 25.99,
@@ -147,3 +187,4 @@ export const products = [
 //     image: require('../../../images/wireless-charger.jpg'), // Path relative to src/data/products.jsx
 //   },
 ];
+

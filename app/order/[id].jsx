@@ -1,5 +1,5 @@
-// app/product/[id].jsx
-import React from 'react';
+// app/order/[id].jsx
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -8,6 +8,7 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
+  Alert,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useCart } from '../../src/context/CartContext';
@@ -30,14 +31,16 @@ const mockSellerData = {
   location: '123 Market Street, New York, NY',
 };
 
-const ProductDetailsScreen = () => {
+const OrderConfirmationScreen = () => {
   const { id } = useLocalSearchParams();
-  const { getAllProducts } = useCart();
+  const { getAllProducts, addToCart } = useCart();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [paymentMethod, setPaymentMethod] = useState('online');
 
-  console.log('ProductDetailsScreen - Product ID:', id);
-  console.log('ProductDetailsScreen - All Products:', getAllProducts());
+  // Debug product ID and data
+  console.log('OrderConfirmationScreen - Product ID:', id);
+  console.log('OrderConfirmationScreen - All Products:', getAllProducts());
 
   const product = getAllProducts().find((p) => p.id === id || p.id.toString() === id);
 
@@ -67,9 +70,17 @@ const ProductDetailsScreen = () => {
     );
   }
 
-  const handleAddToCart = () => {
-    console.log('Navigating to OrderConfirmationScreen with ID:', id);
-    router.push(`/order/${id}`);
+  const handleConfirmOrder = () => {
+    addToCart(product);
+    if (paymentMethod === 'online') {
+      router.push({
+        pathname: '/payment',
+        params: { amount: product.price.toFixed(2) },
+      });
+    } else {
+      Alert.alert('Order Placed', 'You chose Pay on Delivery. Thank you!');
+      router.push('/(tabs)/cart');
+    }
   };
 
   const renderReview = ({ item }) => (
@@ -120,29 +131,28 @@ const ProductDetailsScreen = () => {
             <Ionicons name="arrow-back" size={24} color={colors.secondary.DEFAULT} />
           </TouchableOpacity>
           <Text style={{ fontSize: 20, fontWeight: '700', color: colors.secondary.DEFAULT }}>
-            Product Details
+            Order Confirmation
           </Text>
           <TouchableOpacity onPress={() => router.push('/(tabs)/cart')}>
             <Ionicons name="cart-outline" size={24} color={colors.secondary.DEFAULT} />
           </TouchableOpacity>
         </View>
 
-        <Image
-          source={{ uri: product.image }}
-          style={{
-            width: '100%',
-            height: 256,
-            borderRadius: 8,
-            marginHorizontal: 16,
-          }}
-          resizeMode="contain"
-        />
-
         <View style={{ marginHorizontal: 16, marginTop: 16 }}>
           <Text style={{ fontSize: 24, fontWeight: '700', color: colors.secondary.DEFAULT }}>
             {product.name}
           </Text>
-          <Text style={{ fontSize: 18, fontWeight: '600', color: colors.primary, marginTop: 4 }}>
+          <Image
+            source={{ uri: product.image }}
+            style={{
+              width: '100%',
+              height: 128,
+              borderRadius: 8,
+              marginTop: 8,
+            }}
+            resizeMode="contain"
+          />
+          <Text style={{ fontSize: 18, fontWeight: '600', color: colors.primary, marginTop: 8 }}>
             ${product.price.toFixed(2)}
           </Text>
           <Text style={{ fontSize: 14, color: colors.gray['100'], marginTop: 8 }}>
@@ -198,6 +208,56 @@ const ProductDetailsScreen = () => {
           )}
         </View>
 
+        <View style={{ marginHorizontal: 16, marginBottom: 16 }}>
+          <Text style={{ fontSize: 16, fontWeight: '600', color: colors.secondary.DEFAULT, marginBottom: 8 }}>
+            Choose Payment Method
+          </Text>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                paddingVertical: 12,
+                marginRight: 8,
+                borderRadius: 12,
+                alignItems: 'center',
+                backgroundColor: paymentMethod === 'online' ? colors.primary : colors.gray['50'],
+              }}
+              onPress={() => setPaymentMethod('online')}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: paymentMethod === 'online' ? colors.white : colors.black,
+                }}
+              >
+                Pay Online
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                flex: 1,
+                paddingVertical: 12,
+                marginLeft: 8,
+                borderRadius: 12,
+                alignItems: 'center',
+                backgroundColor: paymentMethod === 'delivery' ? colors.primary : colors.gray['50'],
+              }}
+              onPress={() => setPaymentMethod('delivery')}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: '500',
+                  color: paymentMethod === 'delivery' ? colors.white : colors.black,
+                }}
+              >
+                Pay on Delivery
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
         <View style={{ marginHorizontal: 16, marginBottom: insets.bottom + 16 }}>
           <TouchableOpacity
             style={{
@@ -206,10 +266,10 @@ const ProductDetailsScreen = () => {
               borderRadius: 12,
               alignItems: 'center',
             }}
-            onPress={handleAddToCart}
+            onPress={handleConfirmOrder}
           >
             <Text style={{ fontSize: 16, fontWeight: '600', color: colors.white }}>
-              Add to Cart
+              {paymentMethod === 'online' ? 'Proceed to Payment' : 'Confirm Order'}
             </Text>
           </TouchableOpacity>
         </View>
@@ -218,4 +278,4 @@ const ProductDetailsScreen = () => {
   );
 };
 
-export default ProductDetailsScreen;
+export default OrderConfirmationScreen;

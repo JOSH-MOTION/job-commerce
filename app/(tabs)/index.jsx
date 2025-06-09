@@ -1,67 +1,103 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import React, { useState, useCallback } from 'react';
+import { View, Text, TextInput, FlatList, TouchableOpacity, Animated } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-import { products } from '../../src/data/products';
+import { useCart } from '../../src/context/CartContext';
 import ProductCard from '../../src/components/ProductCard';
 import { colors } from '../../src/styles/colors';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
-export default function HomeScreen() {
+const HomeScreen = () => {
+  const { getAllProducts } = useCart();
   const [searchQuery, setSearchQuery] = useState('');
-  const [filteredProducts, setFilteredProducts] = useState(products);
-  const [notifications, setNotifications] = useState(3); // Mock notifications
+  const [filteredProducts, setFilteredProducts] = useState(getAllProducts());
+  const [notifications, setNotifications] = useState(3);
   const router = useRouter();
+  const scaleAnim = new Animated.Value(1);
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    if (!query) {
-      setFilteredProducts(products);
-      return;
-    }
-    const lowerQuery = query.toLowerCase();
-    const filtered = products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(lowerQuery) ||
-        product.description?.toLowerCase().includes(lowerQuery)
-    );
-    setFilteredProducts(filtered);
+  const handleSearch = useCallback(
+    (query) => {
+      setSearchQuery(query);
+      if (!query) {
+        setFilteredProducts(getAllProducts());
+        return;
+      }
+      const lowerQuery = query.toLowerCase();
+      const filtered = getAllProducts().filter(
+        (product) =>
+          product.name.toLowerCase().includes(lowerQuery) ||
+          product.description?.toLowerCase().includes(lowerQuery)
+      );
+      setFilteredProducts(filtered);
+    },
+    [getAllProducts]
+  );
+
+  const renderItem = useCallback(({ item }) => <ProductCard product={item} />, []);
+
+  const onPressIn = () => {
+    Animated.spring(scaleAnim, { toValue: 0.95, useNativeDriver: true }).start();
+  };
+
+  const onPressOut = () => {
+    Animated.spring(scaleAnim, { toValue: 1, useNativeDriver: true }).start();
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
+    <SafeAreaView className="flex-1" style={{ backgroundColor: colors.background }}>
+      <View className="flex-row justify-between items-center mx-4 mb-4">
         <TouchableOpacity
-          style={styles.profileContainer}
-          onPress={() => router.push('/profile')} // Placeholder route
+          className="flex-row items-center"
+          onPress={() => router.push('/profile')}
+          onPressIn={onPressIn}
+          onPressOut={onPressOut}
         >
-          <Ionicons name="person-circle-outline" size={40} color={colors.secondary} />
-          <Text style={styles.profileName}>John Doe</Text>
+          <Animated.View style={{ transform: [{ scale: scaleAnim }] }}>
+            <Ionicons
+              name="person-circle-outline"
+              size={40}
+              color={colors.secondary.DEFAULT}
+            />
+          </Animated.View>
+          <Text
+            className="text-lg font-psemibold ml-2"
+            style={{ color: colors.secondary.DEFAULT }}
+          >
+            John Doe
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={styles.notificationContainer}
-          onPress={() => setNotifications(0)} // Clear notifications on tap
+          className="relative"
+          onPress={() => setNotifications(0)}
         >
-          <Ionicons name="notifications-outline" size={28} color={colors.secondary} />
+          <Ionicons
+            name="notifications-outline"
+            size={28}
+            color={colors.secondary.DEFAULT}
+          />
           {notifications > 0 && (
-            <View style={styles.notificationBadge}>
-              <Text style={styles.badgeText}>{notifications}</Text>
+            <View className="absolute -top-1 -right-1 bg-primary rounded-full w-5 h-5 justify-center items-center">
+              <Text
+                className="text-xs font-psemibold"
+                style={{ color: colors.white }}
+              >
+                {notifications}
+              </Text>
             </View>
           )}
         </TouchableOpacity>
       </View>
-      <Text style={styles.title}>Discover</Text>
+      <Text
+        className="text-2xl font-pbold mx-4 mb-4"
+        style={{ color: colors.secondary.DEFAULT }}
+      >
+        Discover
+      </Text>
       <TextInput
-        style={styles.searchInput}
+        className="bg-white p-4 rounded-xl text-base mx-4 mb-5 shadow-sm"
+        style={{ color: colors.secondary.DEFAULT }}
         placeholder="Search products..."
-        placeholderTextColor={colors.gray}
+        placeholderTextColor={colors.gray['100']}
         value={searchQuery}
         onChangeText={handleSearch}
         onSubmitEditing={() => {
@@ -72,78 +108,14 @@ export default function HomeScreen() {
       />
       <FlatList
         data={filteredProducts}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <ProductCard product={item} />}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
         numColumns={2}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.flatList}
+        contentContainerStyle={{ paddingBottom: 20, paddingHorizontal: 16 }}
       />
     </SafeAreaView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingHorizontal: 16,
-    paddingTop: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  profileContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  profileName: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: colors.secondary,
-    marginLeft: 8,
-  },
-  notificationContainer: {
-    position: 'relative',
-  },
-  notificationBadge: {
-    position: 'absolute',
-    top: -4,
-    right: -4,
-    backgroundColor: colors.primary,
-    borderRadius: 10,
-    width: 20,
-    height: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  badgeText: {
-    color: colors.white,
-    fontSize: 12,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: colors.secondary,
-    marginBottom: 16,
-  },
-  searchInput: {
-    backgroundColor: colors.white,
-    padding: 14,
-    borderRadius: 12,
-    fontSize: 16,
-    color: colors.secondary,
-    shadowColor: colors.secondary,
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-    marginBottom: 20,
-  },
-  flatList: {
-    paddingBottom: 20,
-  },
-});
+export default HomeScreen;

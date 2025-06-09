@@ -1,34 +1,61 @@
+// app/search/[query].jsx
 import React from 'react';
 import { View, Text, FlatList } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { products } from '../../src/data/products';
+import { useCart } from '../../src/context/CartContext';
 import ProductCard from '../../src/components/ProductCard';
+import { colors } from '../../src/styles/colors';
+import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function SearchResultsScreen() {
   const { query } = useLocalSearchParams();
-  const decodedQuery = decodeURIComponent(query || '');
-  const filteredProducts = products.filter(
+  const { getAllProducts } = useCart();
+  const insets = useSafeAreaInsets();
+
+  const lowerQuery = query.toLowerCase();
+  const filteredProducts = getAllProducts().filter(
     (product) =>
-      product.name.toLowerCase().includes(decodedQuery.toLowerCase()) ||
-      product.description.toLowerCase().includes(decodedQuery.toLowerCase())
+      product.name.toLowerCase().includes(lowerQuery) ||
+      product.description?.toLowerCase().includes(lowerQuery)
   );
 
   return (
-    <View className="flex-1 bg-background p-4">
-      <Text className="text-2xl font-bold text-secondary mb-4">
-        Search Results for "{decodedQuery}"
-      </Text>
-      {filteredProducts.length === 0 ? (
-        <Text className="text-secondary">No products found.</Text>
-      ) : (
-        <FlatList
-          data={filteredProducts}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <ProductCard product={item} />}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
-    </View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background, paddingBottom: insets.bottom }}>
+      <View style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 20,
+      }}>
+        <Text style={{
+          fontSize: 28,
+          fontWeight: '700',
+          color: colors.secondary.DEFAULT,
+          marginBottom: 16,
+        }}>
+          Search: "{query}"
+        </Text>
+        {filteredProducts.length > 0 ? (
+          <FlatList
+            data={filteredProducts}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => <ProductCard product={item} />}
+            numColumns={2}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: insets.bottom + 20,
+            }}
+          />
+        ) : (
+          <Text style={{
+            fontSize: 16,
+            color: colors.gray['100'],
+            textAlign: 'center',
+            marginTop: 20,
+          }}>
+            No results found.
+          </Text>
+        )}
+      </View>
+    </SafeAreaView>
   );
 }
