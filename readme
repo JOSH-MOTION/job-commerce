@@ -1,0 +1,16 @@
+# E-Commerce Mobile App UI
+
+A modern e-commerce mobile app UI built with **React Native**, **Expo Router**, and **NativeWind**. Features include splash screens, sign-in/sign-up flows, a home screen with a fuzzy search algorithm, product listing, product details, and a cart screen. Navigation is handled via Expo Router's file-based routing, and styling is done with NativeWind (Tailwind CSS).
+
+## Features
+- **Screens**: Splash, SignIn, SignUp, Home (with search), Product List, Product Details, Cart
+- **Navigation**: Expo Router with stack and bottom tabs
+- **Search**: Client-side fuzzy search for products
+- **Styling**: NativeWind with a unique color palette (`#FF6F61`, `#2A2D34`, `#F4F4F9`, `#FFD166`)
+- **Assets**: Splash screens in the `images` folder
+- **No Authentication**: Navigation-only flows for SignIn/SignUp
+
+## Installation
+1. **Initialize Project**:
+   ```bash
+   npx create-expo-app@latest --template tabs
